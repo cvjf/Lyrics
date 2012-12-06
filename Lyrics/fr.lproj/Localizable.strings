@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Lyrics
+
+  Created by Andrew A.A. on 16/09/12.
+  Copyright (c) 2012 Hunan Institute of Science. All rights reserved.
+*/
+
+"Discard" = "Annuler les modification";
+
+"Cancel" = "Annuler";
+
+"SaveAlertMessage" = "Êtez-vous sur d'enregistrer les modifications?";
+
+"Save" = "Enregistrer";
+
+"Export..." = "Exporter...";
+
+"Artist" = "Artiste";
+
+"Track" = "Piste";
+
+"Edited" = " - Modifiée";
+
+"Lyrics" = "Paroles";
+
+"lyrics" = "paroles";
