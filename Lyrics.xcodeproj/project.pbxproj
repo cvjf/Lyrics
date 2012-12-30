@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4955C812168F671B00C99852 /* TB_actualSize.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4955C80F168F671B00C99852 /* TB_actualSize.pdf */; };
+		4955C813168F671B00C99852 /* TB_zoomIn.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4955C810168F671B00C99852 /* TB_zoomIn.pdf */; };
+		4955C814168F671B00C99852 /* TB_zoomOut.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4955C811168F671B00C99852 /* TB_zoomOut.pdf */; };
 		49725E39156A604D00C93A24 /* Lyrics.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49725E38156A604D00C93A24 /* Lyrics.icns */; };
 		49725E4E156A88FA00C93A24 /* GBAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49725E4D156A88FA00C93A24 /* GBAppController.m */; };
+		4983D7141690217600605D32 /* GBTrackableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4983D7131690217600605D32 /* GBTrackableView.m */; };
 		49B7AE4715559AFE0071EFD1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B7AE4615559AFE0071EFD1 /* Cocoa.framework */; };
 		49B7AE5115559AFE0071EFD1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49B7AE4F15559AFE0071EFD1 /* InfoPlist.strings */; };
 		49B7AE5315559AFE0071EFD1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B7AE5215559AFE0071EFD1 /* main.m */; };
@@ -24,9 +28,14 @@
 		4933844F1556D05900B49FA3 /* iTunes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		493384571556D11B00B49FA3 /* TextEdit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextEdit.h; sourceTree = "<group>"; };
 		494D8AE715E4C8DB00AA9A02 /* Safari.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Safari.h; sourceTree = "<group>"; };
+		4955C80F168F671B00C99852 /* TB_actualSize.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = TB_actualSize.pdf; sourceTree = "<group>"; };
+		4955C810168F671B00C99852 /* TB_zoomIn.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = TB_zoomIn.pdf; sourceTree = "<group>"; };
+		4955C811168F671B00C99852 /* TB_zoomOut.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = TB_zoomOut.pdf; sourceTree = "<group>"; };
 		49725E38156A604D00C93A24 /* Lyrics.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Lyrics.icns; path = ../Lyrics.icns; sourceTree = "<group>"; };
 		49725E4C156A88FA00C93A24 /* GBAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBAppController.h; sourceTree = "<group>"; };
 		49725E4D156A88FA00C93A24 /* GBAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBAppController.m; sourceTree = "<group>"; };
+		4983D7121690217600605D32 /* GBTrackableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBTrackableView.h; sourceTree = "<group>"; };
+		4983D7131690217600605D32 /* GBTrackableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBTrackableView.m; sourceTree = "<group>"; };
 		49B7AE4215559AFE0071EFD1 /* Lyrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lyrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B7AE4615559AFE0071EFD1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		49B7AE4915559AFE0071EFD1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -44,10 +53,6 @@
 		49DE533116056D4A002AA287 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49DE534116057B67002AA287 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49DE534316057B6A002AA287 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		49E0426415E27EE400C71543 /* GBPinnableWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBPinnableWindow.h; sourceTree = "<group>"; };
-		49E0426515E27EE400C71543 /* GBPinnableWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBPinnableWindow.m; sourceTree = "<group>"; };
-		49E0426C15E28A7B00C71543 /* GBPinnableWindowFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBPinnableWindowFrameView.h; sourceTree = "<group>"; };
-		49E0426D15E28A7B00C71543 /* GBPinnableWindowFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBPinnableWindowFrameView.m; sourceTree = "<group>"; };
 		49ED635F166F2BC10002A5E0 /* share_twitter.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = share_twitter.tiff; sourceTree = "<group>"; };
 		49ED6360166F2BC10002A5E0 /* share_weibo.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = share_weibo.tiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +126,11 @@
 		49C9083F15569A0B00F110BC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4955C80F168F671B00C99852 /* TB_actualSize.pdf */,
+				4955C810168F671B00C99852 /* TB_zoomIn.pdf */,
+				4955C811168F671B00C99852 /* TB_zoomOut.pdf */,
+				49ED635F166F2BC10002A5E0 /* share_twitter.tiff */,
+				49ED6360166F2BC10002A5E0 /* share_weibo.tiff */,
 				49B7AE4E15559AFE0071EFD1 /* Lyrics-Info.plist */,
 				49B7AE4F15559AFE0071EFD1 /* InfoPlist.strings */,
 				49DE534216057B67002AA287 /* Localizable.strings */,
@@ -134,11 +144,10 @@
 		49C9084015569A1500F110BC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				49ED635F166F2BC10002A5E0 /* share_twitter.tiff */,
-				49ED6360166F2BC10002A5E0 /* share_weibo.tiff */,
 				49725E4C156A88FA00C93A24 /* GBAppController.h */,
 				49725E4D156A88FA00C93A24 /* GBAppController.m */,
-				49E0426F15E2935100C71543 /* Obsolete */,
+				4983D7121690217600605D32 /* GBTrackableView.h */,
+				4983D7131690217600605D32 /* GBTrackableView.m */,
 			);
 			name = Classes;
 			path = Lyrics;
@@ -151,17 +160,6 @@
 			);
 			name = Nibs;
 			path = Lyrics;
-			sourceTree = "<group>";
-		};
-		49E0426F15E2935100C71543 /* Obsolete */ = {
-			isa = PBXGroup;
-			children = (
-				49E0426415E27EE400C71543 /* GBPinnableWindow.h */,
-				49E0426515E27EE400C71543 /* GBPinnableWindow.m */,
-				49E0426C15E28A7B00C71543 /* GBPinnableWindowFrameView.h */,
-				49E0426D15E28A7B00C71543 /* GBPinnableWindowFrameView.m */,
-			);
-			name = Obsolete;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,6 +221,9 @@
 				49DE534016057B67002AA287 /* Localizable.strings in Resources */,
 				49ED6361166F2BC10002A5E0 /* share_twitter.tiff in Resources */,
 				49ED6362166F2BC10002A5E0 /* share_weibo.tiff in Resources */,
+				4955C812168F671B00C99852 /* TB_actualSize.pdf in Resources */,
+				4955C813168F671B00C99852 /* TB_zoomIn.pdf in Resources */,
+				4955C814168F671B00C99852 /* TB_zoomOut.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +236,7 @@
 			files = (
 				49B7AE5315559AFE0071EFD1 /* main.m in Sources */,
 				49725E4E156A88FA00C93A24 /* GBAppController.m in Sources */,
+				4983D7141690217600605D32 /* GBTrackableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

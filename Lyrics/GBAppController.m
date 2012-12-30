@@ -6,17 +6,23 @@
 //  Copyright (c) 2012 Hunan Institute of Science. All rights reserved.
 //
 
+#import "GBTrackableView.h"
+
 #import "GBAppController.h"
 #import "iTunes.h"
-#import "Safari.h"
 #import <ScriptingBridge/ScriptingBridge.h>
 #import <ApplicationServices/ApplicationServices.h>
 
 #define GBLocString(key) NSLocalizedString (key, nil)
+#define GBConvertFontToText(font) [NSString stringWithFormat:@"%@ - %.0f", font.familyName, font.pointSize]
 
-NSString *GBPrefWindowIsPinned;
 NSString *GBPrefWindowIsAtTop;
+NSString *GBPrefWindowIsPinned;
+NSString *GBPrefLyricsDisplayFont;
 NSString *GBPrefWindowIsAttachedToOthers;
+NSString *GBPrefWindowAlphaValue;
+
+NSUserDefaults *userDefaults;
 
 NSString *kSearchQueryPrefix;
 
@@ -34,6 +40,9 @@ NSString *kSearchQueryPrefix;
 @property (unsafe_unretained) IBOutlet NSTextField *currentTrackArtist;
 
 @property (unsafe_unretained) IBOutlet NSPopover *preferencePopover;
+@property (unsafe_unretained) IBOutlet NSTextField *fontRepresentationTextField;
+
+@property (nonatomic, assign) CGFloat windowAlphaValue;
 
 @property (nonatomic, strong) iTunesFileTrack *currentTrack;
 @property (nonatomic, strong, readonly) iTunesApplication *iTunesApp;
@@ -59,39 +68,33 @@ NSString *kSearchQueryPrefix;
 - (IBAction)postOnWeiboPressed:(id)sender;
 - (IBAction)postOnTwitterPressed:(id)sender;
 
+- (IBAction)toggleFontPanel:(id)sender;
+
 @end
 
 @implementation GBAppController
 
-@synthesize iTunesApp		= _iTunesApp;
-@synthesize currentTrack	= _currentTrack;
-
-@synthesize postOnWeiboButton   = _postOnWeiboButton;
-@synthesize postOnTwitterButton = _postOnTwitterButton;
-
-@synthesize lyricsBrowser		= _lyricsBrowser;
-@synthesize currentTrackName	= _currentTrackName;
-@synthesize currentTrackAlbum	= _currentTrackAlbum;
-@synthesize currentTrackArtist	= _currentTrackArtist;
-
-@synthesize preferencePopover		= _preferencePopover;
-@synthesize hasUnsavedChanges		= _hasUnsavedChanges;		// auto-update window title
-@synthesize mainWindowIsAtTop		= _mainWindowIsAtTop;
-@synthesize mainWindowIsPinned		= _mainWindowIsPinned;
-@synthesize isInteractingWithUser	= _isInteractingWithUser;
+@synthesize iTunesApp = _iTunesApp;
+@synthesize mainWindowIsAtTop = _mainWindowIsAtTop;
 @synthesize mainWindowIsAttachedToOthers = _mainWindowIsAttachedToOthers;
+@synthesize mainWindowIsPinned = _mainWindowIsPinned;
 
 + (void)initialize
 {
 	GBPrefWindowIsAtTop  = @"GBPrefWindowIsAtTop";
 	GBPrefWindowIsPinned = @"GBPrefWindowIsPinned";
 	GBPrefWindowIsAttachedToOthers = @"GBPrefWindowIsAttachedToOthers";
+	GBPrefLyricsDisplayFont = @"GBPrefLyricsDisplayFont";
+	GBPrefWindowAlphaValue = @"GBPrefWindowAlphaValue";
 
 	kSearchQueryPrefix = @"www.google.com/search?q=";
 
-	NSDictionary *defaults = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], GBPrefWindowIsAttachedToOthers, nil];
-	
-	[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+	userDefaults = [NSUserDefaults standardUserDefaults];
+
+	NSData *fontData = [NSKeyedArchiver archivedDataWithRootObject:[NSFont fontWithName:@"Optima-Italic" size:14]];
+	NSDictionary *defaults = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], GBPrefWindowIsAttachedToOthers, fontData, GBPrefLyricsDisplayFont, [NSNumber numberWithFloat:0.5], GBPrefWindowAlphaValue, nil];
+
+	[userDefaults registerDefaults:defaults];
 }
 
 
@@ -103,10 +106,7 @@ NSString *kSearchQueryPrefix;
 	if (self.hasUnsavedChanges)
 		[self askUserToCommitChanges:nil];
 
-	[[self.window animator] setAlphaValue:0.0];
-	NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:0.3] interval:0 target:NSApp selector:@selector(terminate:) userInfo:nil repeats:NO];
-
-	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+	[NSApp terminate:nil];
 }
 
 - (IBAction)hideApp:(id)sender
@@ -136,12 +136,16 @@ NSString *kSearchQueryPrefix;
 														selector:@selector(iTunesPlayerStateDidChange:)
 															name:@"com.apple.iTunes.playerInfo" object:nil];
 
-	NSString  *	fontFace = @"Optima Italic";
-	CGFloat		fontSize = 14.0;
-	
+	NSData *displayFontData = [userDefaults objectForKey:GBPrefLyricsDisplayFont];
+	NSFont *displayFont = [NSKeyedUnarchiver unarchiveObjectWithData:displayFontData];
+
+	[self.fontRepresentationTextField setStringValue:GBConvertFontToText(displayFont)];
+
+	[[NSFontManager sharedFontManager] setDelegate:self];
+
 	[self.lyricsBrowser setAlignment:NSCenterTextAlignment];
 	[self.lyricsBrowser setTextColor:[NSColor whiteColor]];
-	[self.lyricsBrowser setFont:[NSFont fontWithName:fontFace size:fontSize]];
+	[self.lyricsBrowser setFont:displayFont];
 	[self.lyricsBrowser setInsertionPointColor:[NSColor whiteColor]];
 	
 	// update the lyrics browser accrodingly
@@ -150,14 +154,65 @@ NSString *kSearchQueryPrefix;
 	else
 		[self iTunesPlayerDidStopPlaying];
 
-	[self.window orderFront:self];
-	[[self.window animator] setAlphaValue:1.0];
-
 	[self.postOnWeiboButton sendActionOn:NSLeftMouseUpMask];
 	[self.postOnTwitterButton sendActionOn:NSLeftMouseUpMask];
 
-//	self.postOnWeiboButton.image = self.weiboSharingService.image;
-//	self.postOnTwitterButton.image = self.twitterSharingServer.image;
+	[self willChangeValueForKey:@"windowAlphaValue"];
+	_windowAlphaValue = [userDefaults floatForKey:GBPrefWindowAlphaValue];
+	[self didChangeValueForKey:@"windowAlphaValue"];
+
+	[(GBTrackableView *)self.window.contentView setDelegate:self];
+
+	[self.window orderFront:self];
+}
+
+- (void)mouseEnteredTrackableView:(NSEvent *)event
+{
+	[[self.window animator] setAlphaValue:1];
+}
+
+- (void)mouseExitedTrackableView:(NSEvent *)event
+{
+	[[self.window animator] setAlphaValue:self.windowAlphaValue];
+}
+
+- (void)applicationWillBecomeActive:(NSNotification *)notification
+{
+	if (self.window.alphaValue != 1)
+		[self.window.animator setAlphaValue:1];
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification
+{
+	[self.window.animator setAlphaValue:self.windowAlphaValue];
+}
+
+- (void)toggleFontPanel:(id)sender
+{
+	[[NSFontPanel sharedFontPanel] setIsVisible:YES];
+}
+
+- (void)changeFont:(NSFontManager *)sender
+{
+	NSFont *newFont = [sender convertFont:self.lyricsBrowser.font];
+	[self.lyricsBrowser setFont:newFont];
+	[self.fontRepresentationTextField setStringValue:GBConvertFontToText(newFont)];
+
+	[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:newFont] forKey:GBPrefLyricsDisplayFont];
+}
+
+- (void)setWindowAlphaValue:(CGFloat)windowAlphaValue
+{
+	if (_windowAlphaValue == 1)
+		[self.window.contentView setDelegate:self];
+	else if (windowAlphaValue == 1) {
+		[self.window.contentView setDelegate:nil];
+		[[self.window animator] setAlphaValue:1];
+	}
+
+	_windowAlphaValue = windowAlphaValue;
+
+	[userDefaults setFloat:windowAlphaValue forKey:GBPrefWindowAlphaValue];
 }
 
 
@@ -309,12 +364,13 @@ NSString *kSearchQueryPrefix;
 	}
 }
 
+
 #pragma mark
 #pragma mark Popover View
 
 - (BOOL)mainWindowIsAtTop
 {
-	_mainWindowIsAtTop = [[NSUserDefaults standardUserDefaults] boolForKey:GBPrefWindowIsAtTop];
+	_mainWindowIsAtTop = [userDefaults boolForKey:GBPrefWindowIsAtTop];
 
 	if (_mainWindowIsAtTop)
 		[self.window setLevel:NSFloatingWindowLevel];
@@ -336,13 +392,13 @@ NSString *kSearchQueryPrefix;
 	else
 		[self.window setLevel:NSNormalWindowLevel];
 
-	[[NSUserDefaults standardUserDefaults] setBool:_mainWindowIsAtTop forKey:GBPrefWindowIsAtTop];
+	[userDefaults setBool:_mainWindowIsAtTop forKey:GBPrefWindowIsAtTop];
 
 }
 
 - (BOOL)mainWindowIsPinned
 {
-	_mainWindowIsPinned = [[NSUserDefaults standardUserDefaults] boolForKey:GBPrefWindowIsPinned];
+	_mainWindowIsPinned = [userDefaults boolForKey:GBPrefWindowIsPinned];
 
 	if (_mainWindowIsPinned)
 		[self.window setCollectionBehavior:NSWindowCollectionBehaviorDefault];
@@ -364,12 +420,12 @@ NSString *kSearchQueryPrefix;
 	else
 		[self.window setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
 
-	[[NSUserDefaults standardUserDefaults] setBool:_mainWindowIsPinned forKey:GBPrefWindowIsPinned];
+	[userDefaults setBool:_mainWindowIsPinned forKey:GBPrefWindowIsPinned];
 }
 
 - (BOOL)mainWindowIsAttachedToOthers
 {
-	_mainWindowIsAttachedToOthers = [[NSUserDefaults standardUserDefaults] boolForKey:GBPrefWindowIsAttachedToOthers];
+	_mainWindowIsAttachedToOthers = [userDefaults boolForKey:GBPrefWindowIsAttachedToOthers];
 
 	if (!_mainWindowIsAttachedToOthers) {
 		ProcessSerialNumber psn = { 0, kCurrentProcess };
@@ -396,7 +452,7 @@ NSString *kSearchQueryPrefix;
         SetFrontProcess(&psn);
 	}
 
-	[[NSUserDefaults standardUserDefaults] setBool:_mainWindowIsAttachedToOthers forKey:GBPrefWindowIsAttachedToOthers];
+	[userDefaults setBool:_mainWindowIsAttachedToOthers forKey:GBPrefWindowIsAttachedToOthers];
 }
 
 - (void)togglePreferencePopover:(NSButton *)sender

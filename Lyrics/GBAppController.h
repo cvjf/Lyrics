@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface GBAppController : NSWindowController <NSApplicationDelegate, NSPopoverDelegate, NSSharingServiceDelegate>
+@protocol GBTrackbleViewDelegate;
+
+@interface GBAppController : NSWindowController <NSApplicationDelegate, NSPopoverDelegate, NSSharingServiceDelegate, GBTrackbleViewDelegate>
 
 
 @end
