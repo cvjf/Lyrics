@@ -147,7 +147,7 @@ NSString *kSearchQueryPrefix;
 	[self.lyricsBrowser setTextColor:[NSColor whiteColor]];
 	[self.lyricsBrowser setFont:displayFont];
 	[self.lyricsBrowser setInsertionPointColor:[NSColor whiteColor]];
-	
+
 	// update the lyrics browser accrodingly
 	if (self.iTunesApp.isRunning && (self.iTunesApp.currentTrack.name != nil))
 		[self iTunesPlayerDidChangeToNewTrack];
