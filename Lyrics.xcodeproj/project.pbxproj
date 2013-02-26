@@ -188,7 +188,7 @@
 		49B7AE3915559AFE0071EFD1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Hunan Institute of Science";
 			};
 			buildConfigurationList = 49B7AE3C15559AFE0071EFD1 /* Build configuration list for PBXProject "Lyrics" */;
@@ -324,7 +324,6 @@
 		49B7AE6115559AFF0071EFD1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Lyrics/Lyrics-Prefix.pch";
@@ -339,7 +338,6 @@
 		49B7AE6215559AFF0071EFD1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Lyrics/Lyrics-Prefix.pch";
