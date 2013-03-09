@@ -528,9 +528,9 @@ NSString *kSearchQueryPrefix;
 	NSMutableString *descriptionStr = [[NSMutableString alloc] initWithCapacity:30];
 
 	if (![self.currentTrackArtist.stringValue isEqualToString:@""])
-		[descriptionStr appendFormat:@"#%@# - ", self.currentTrackArtist.stringValue];
+		[descriptionStr appendFormat:@"#%@# by ", self.currentTrackName.stringValue];
 
-	[descriptionStr appendFormat:@"%@", self.currentTrackName.stringValue];
+	[descriptionStr appendFormat:@"#%@# ", self.currentTrackArtist.stringValue];
 
 	iTunesArtwork *artwork = [[self.currentTrack.artworks get] lastObject];
 	NSImage *artworkImage = nil;
