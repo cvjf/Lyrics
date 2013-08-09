@@ -22,6 +22,8 @@ NSString *GBPrefLyricsDisplayFont;
 NSString *GBPrefWindowIsAttachedToOthers;
 NSString *GBPrefWindowAlphaValue;
 
+NSArray *GBTrackRating;
+
 NSUserDefaults *userDefaults;
 
 NSString *kSearchQueryPrefix;
@@ -88,6 +90,8 @@ NSString *kSearchQueryPrefix;
 	GBPrefWindowAlphaValue = @"GBPrefWindowAlphaValue";
 
 	kSearchQueryPrefix = @"www.google.com/search?q=";
+
+	GBTrackRating = [[NSArray alloc] initWithObjects:@"☆☆☆☆☆", @"½☆☆☆☆", @"★☆☆☆☆", @"★½☆☆☆", @"★★☆☆☆", @"★★½☆☆", @"★★★☆☆", @"★★★½☆", @"★★★★☆", @"★★★★½", @"★★★★★", nil];
 
 	userDefaults = [NSUserDefaults standardUserDefaults];
 
@@ -525,12 +529,17 @@ NSString *kSearchQueryPrefix;
 
 - (NSArray *)currentTrackDescription
 {
-	NSMutableString *descriptionStr = [[NSMutableString alloc] initWithCapacity:30];
+	NSMutableString *descriptionStr = [[NSMutableString alloc] initWithCapacity:50];
 
-	if (![self.currentTrackArtist.stringValue isEqualToString:@""])
+	[descriptionStr appendFormat:@"%@ - ", [GBTrackRating objectAtIndex:(self.currentTrack.rating / 10)]];
+
+	if ([self.currentTrackArtist.stringValue isEqualToString:@""])
+		[descriptionStr appendFormat:@"#%@# ", self.currentTrackName.stringValue];
+	else 
+	{
 		[descriptionStr appendFormat:@"#%@# by ", self.currentTrackName.stringValue];
-
-	[descriptionStr appendFormat:@"#%@# ", self.currentTrackArtist.stringValue];
+		[descriptionStr appendFormat:@"#%@# ", self.currentTrackArtist.stringValue];
+	}
 
 	iTunesArtwork *artwork = [[self.currentTrack.artworks get] lastObject];
 	NSImage *artworkImage = nil;
